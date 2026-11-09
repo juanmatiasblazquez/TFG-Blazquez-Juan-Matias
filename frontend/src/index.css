@@ -1,0 +1,2648 @@
+/* El portal según los prototipos de las p. 48 a 51 (figuras 15 a 21; D73).
+   Los colores salen de las figuras: la barra azul noche, el azul de las acciones, las tarjetas sobre un
+   fondo gris azulado y las insignias en píldora. La tipografía es la de las figuras (Helvetica/Arial). */
+
+/* --- Paleta -------------------------------------------------------------------------------------- */
+
+:root {
+  --azul-noche: #13293d;
+  --primario: #1f6fb2;
+  --primario-oscuro: #185a91;
+  --primario-claro: #e8f1fb;
+  --fondo-pagina: #f4f6f9;
+  --fondo-tarjeta: #ffffff;
+  --fondo-suave: #fafbfd;
+  --borde: #e1e7ed;
+  --borde-campo: #b8c4d0;
+  --texto: #1b2733;
+  --tenue: #5f6f80;
+  --titulo-seccion: #6a7988;
+  --ok: #2e8b57;
+  --ok-fondo: #e6f4ea;
+  --error: #c62828;
+  --error-texto: #b42318;
+  --error-fondo: #fdecec;
+  --aviso: #8d5a00;
+  --aviso-fondo: #fff1d6;
+  --aviso-borde: #f2c27a;
+  --aviso-recuadro: #fffcf5;
+  --info-texto: #1f5f99;
+  --neutra-fondo: #eef1f4;
+  --degradada: #d69e2e;
+  --verificando: #8a94a0;
+  --ancho-panel: 400px;
+  --ancho-panel-izquierda: 340px;
+  --radio: 8px;
+  --sombra: 0 1px 3px rgba(19, 41, 61, 0.12);
+
+  /* Los nombres de antes, que todavía usan algunas reglas. */
+  --color-fondo: var(--fondo-tarjeta);
+  --color-texto: var(--texto);
+  --color-borde: var(--borde);
+  --color-ok: var(--ok);
+  --color-error: var(--error);
+  --color-tenue: var(--tenue);
+  --color-primario: var(--primario);
+  --color-primario-oscuro: var(--primario-oscuro);
+  --color-aviso: var(--aviso);
+  --color-fondo-panel: var(--fondo-pagina);
+
+  font-family: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--texto);
+  background: var(--fondo-pagina);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--fondo-pagina);
+}
+
+a {
+  color: var(--primario);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+
+h2 {
+  font-size: 1.2rem;
+}
+
+h3 {
+  font-size: 1.05rem;
+}
+
+h4 {
+  margin-top: 0.9rem;
+  font-size: 0.95rem;
+}
+
+.texto-tenue {
+  color: var(--tenue);
+  font-size: 0.93rem;
+}
+
+.texto-ok {
+  color: var(--ok);
+}
+
+.numero {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Marco: la barra superior y la página ----------------------------------------------------------- */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.contenido {
+  flex: 1;
+  min-height: 0;
+}
+
+.barra {
+  display: flex;
+  align-items: stretch;
+  gap: 1.75rem;
+  height: 52px;
+  padding: 0 1.15rem;
+  background: var(--azul-noche);
+  color: #ffffff;
+}
+
+.barra__marca {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.barra__estudio {
+  display: flex;
+  align-items: center;
+  margin-left: -0.9rem;
+  color: #b9c6d3;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.barra__nav {
+  display: flex;
+  align-items: stretch;
+  gap: 1.3rem;
+}
+
+.barra__enlace {
+  display: flex;
+  align-items: center;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid transparent;
+  color: #c7d2dd;
+  font-size: 0.98rem;
+  text-decoration: none;
+}
+
+.barra__enlace:hover {
+  color: #ffffff;
+}
+
+.barra__enlace--actual {
+  border-bottom-color: #4a90d9;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.barra__derecha {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-left: auto;
+}
+
+.logo {
+  flex: none;
+}
+
+/* El estado de la API (sesión 1): un punto en la barra; el detalle, en el menú del usuario. */
+.indicador {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--fondo-tarjeta);
+  color: var(--texto);
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+
+.indicador--compacto {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.indicador__punto {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--verificando);
+}
+
+.indicador--ok .indicador__punto {
+  background: #3fb871;
+}
+
+.indicador--degradada .indicador__punto {
+  background: var(--degradada);
+}
+
+.indicador--error .indicador__punto {
+  background: #e05252;
+}
+
+/* El usuario: el avatar con sus iniciales, su nombre y su rol; el menú, al hacer clic. */
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.25rem 0.35rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #ffffff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.usuario:hover,
+.usuario[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #2f7bc4;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.usuario__nombre {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.usuario__nombre strong {
+  font-size: 0.98rem;
+}
+
+.usuario__nombre small {
+  color: #b9c6d3;
+  font-size: 0.82rem;
+}
+
+/* Un desplegable (el menú del usuario, el de las alternativas, el de cambiar las comparadas). */
+.desplegable {
+  position: relative;
+  display: inline-flex;
+}
+
+.desplegable__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  z-index: 2100;
+  min-width: 220px;
+  padding: 0.4rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--fondo-tarjeta);
+  box-shadow: 0 6px 20px rgba(19, 41, 61, 0.18);
+  color: var(--texto);
+}
+
+.desplegable__menu--izquierda {
+  left: 0;
+}
+
+.desplegable__menu--derecha {
+  right: 0;
+}
+
+.desplegable__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--texto);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.desplegable__item:hover {
+  background: var(--fondo-pagina);
+}
+
+.desplegable__item--actual {
+  font-weight: 700;
+}
+
+.desplegable__separador {
+  margin: 0.35rem 0;
+  border: 0;
+  border-top: 1px solid var(--borde);
+}
+
+.desplegable__nota {
+  padding: 0.35rem 0.6rem;
+}
+
+/* El aviso de que la sesión está por vencer, debajo de la barra. */
+.aviso-vencimiento {
+  padding: 0.45rem 1rem;
+  border-bottom: 1px solid #f3d38a;
+  background: #fff8e6;
+  color: #7a4d00;
+  font-size: 0.93rem;
+}
+
+/* La página: la barra de la página (migas, título, insignias y acciones) y el cuerpo. */
+.vista {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.vista__cuerpo {
+  flex: 1;
+  min-height: 0;
+}
+
+.vista__cuerpo--hoja {
+  overflow: auto;
+  padding: 1rem 1.15rem 2rem;
+}
+
+.barra-pagina {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-height: 54px;
+  padding: 0.45rem 1.15rem;
+  border-bottom: 1px solid var(--borde);
+  background: var(--fondo-tarjeta);
+}
+
+.barra-pagina__titulos {
+  min-width: 0;
+}
+
+.migas {
+  color: var(--tenue);
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+
+.migas a {
+  color: var(--tenue);
+  text-decoration: none;
+}
+
+.migas a:hover {
+  color: var(--primario);
+  text-decoration: underline;
+}
+
+.barra-pagina__titulo {
+  font-size: 1.22rem;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.barra-pagina__centro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.barra-pagina__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-left: auto;
+}
+
+/* El título que despliega las alternativas («Alternativa B ▾»). */
+.titulo-desplegable {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.titulo-desplegable::after,
+.selector::after {
+  content: "";
+  border: 5px solid transparent;
+  border-top: 6px solid currentColor;
+  border-bottom: 0;
+  opacity: 0.6;
+}
+
+/* Un selector con la forma de los campos (la versión, en la barra de la página). */
+.selector {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 140px;
+  height: 32px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--borde-campo);
+  border-radius: 6px;
+  background: var(--fondo-tarjeta);
+  color: var(--texto);
+  font: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.pagina {
+  height: 100%;
+  overflow: auto;
+  padding: 1rem 1.25rem;
+}
+
+.pagina__encabezado,
+.panel__encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+/* --- Mapa y panel ----------------------------------------------------------------------------------- */
+
+/* El mapa a la izquierda y el panel a la derecha, como en las figuras 17 a 21. El orden visual sale de
+   las áreas de la grilla: el panel puede venir antes en el documento. */
+.espacio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--ancho-panel);
+  grid-template-areas: "mapa panel";
+  height: 100%;
+}
+
+.espacio > .panel {
+  grid-area: panel;
+  border-left: 1px solid var(--borde);
+}
+
+.espacio > .espacio__mapa {
+  grid-area: mapa;
+}
+
+/* El alta: el panel a la izquierda, como en la figura 15. */
+.espacio--panel-izquierda {
+  grid-template-columns: var(--ancho-panel-izquierda) minmax(0, 1fr);
+  grid-template-areas: "panel mapa";
+}
+
+.espacio--panel-izquierda > .panel {
+  border-left: 0;
+  border-right: 1px solid var(--borde);
+}
+
+.panel {
+  overflow: auto;
+  padding: 0.9rem 1rem 1.5rem;
+  background: var(--fondo-tarjeta);
+  font-size: 0.97rem;
+}
+
+.panel__seccion {
+  margin-bottom: 1rem;
+}
+
+.espacio__mapa {
+  position: relative;
+  min-height: 0;
+  background: #f2efe9;
+}
+
+.mapa {
+  height: 100%;
+  width: 100%;
+  background: #f2efe9;
+}
+
+/* La cartografía base, atenuada: el trazado es lo que importa (figuras 15 a 21). */
+.mapa .leaflet-tile-pane {
+  filter: saturate(0.45) brightness(1.04) contrast(0.92);
+}
+
+.ficha {
+  margin: 0 0 0.75rem;
+  color: var(--tenue);
+}
+
+/* Las pestañas del panel: «Resumen | Versiones | Observaciones». */
+.pestanas-panel {
+  display: flex;
+  gap: 1.4rem;
+  margin: 0 0 0.9rem;
+  border-bottom: 1px solid var(--borde);
+}
+
+.pestanas-panel__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0 0.55rem;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  color: var(--tenue);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.pestanas-panel__item:hover {
+  color: var(--texto);
+}
+
+.pestanas-panel__item--actual {
+  border-bottom-color: var(--primario);
+  color: var(--primario);
+}
+
+/* --- Tarjetas e indicadores --------------------------------------------------------------------------- */
+
+.tarjeta-seccion {
+  margin-bottom: 0.9rem;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--fondo-tarjeta);
+}
+
+.panel .tarjeta-seccion,
+.tarjeta-seccion--suave {
+  background: var(--fondo-suave);
+}
+
+.tarjeta-seccion--aviso {
+  border-color: var(--aviso-borde);
+  background: var(--aviso-recuadro);
+}
+
+.titulo-seccion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0 0 0.6rem;
+  color: var(--titulo-seccion);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.tarjeta-seccion--aviso .titulo-seccion {
+  color: #a8670a;
+}
+
+/* Filas «dato · valor», como «Patrón de red · orientación    Grilla · 86,8°». */
+.filas {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 0.75rem;
+  margin: 0;
+}
+
+.filas dt {
+  color: var(--tenue);
+}
+
+.filas dd {
+  margin: 0;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Las tarjetas de los indicadores: dos columnas. */
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.tarjeta-indicador {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: var(--fondo-suave);
+}
+
+.tarjeta-indicador__titulo {
+  color: var(--tenue);
+  font-size: 0.86rem;
+}
+
+.tarjeta-indicador__valor {
+  font-size: 1.32rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.tarjeta-indicador__unidad {
+  color: var(--tenue);
+  font-size: 0.86rem;
+  font-weight: 400;
+}
+
+.mas-indicadores {
+  margin-top: 0.6rem;
+}
+
+.mas-indicadores summary {
+  color: var(--primario);
+  cursor: pointer;
+}
+
+.mas-indicadores .filas {
+  margin-top: 0.5rem;
+  font-size: 0.93rem;
+}
+
+/* Las verificaciones: ✓ o ✗ por restricción, con su detalle (p. 49). */
+.verificaciones {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.verificaciones li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 0.15rem 0.6rem;
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--borde);
+}
+
+.verificaciones li:first-child {
+  border-top: 0;
+  padding-top: 0.1rem;
+}
+
+.verificaciones strong {
+  font-size: 1rem;
+}
+
+.verificaciones p {
+  grid-column: 2;
+  margin: 0;
+  color: var(--tenue);
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.marca--ok {
+  background: var(--ok);
+}
+
+.marca--error {
+  background: var(--error);
+}
+
+.marca--aviso {
+  background: #d4920f;
+}
+
+.marca--info {
+  background: var(--primario);
+}
+
+/* --- Botones, campos e insignias -------------------------------------------------------------------- */
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 32px;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--borde-campo);
+  border-radius: 6px;
+  background: var(--fondo-tarjeta);
+  color: var(--texto);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.boton:hover:not(:disabled) {
+  border-color: #8fa3b8;
+  background: var(--fondo-suave);
+}
+
+.boton--primario {
+  border-color: var(--primario);
+  background: var(--primario);
+  color: #ffffff;
+}
+
+.boton--primario:hover:not(:disabled) {
+  border-color: var(--primario-oscuro);
+  background: var(--primario-oscuro);
+}
+
+.boton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.boton--chico {
+  min-height: 26px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+.boton--enlace {
+  min-height: 0;
+  padding: 0.25rem 0;
+  border: none;
+  background: none;
+  color: var(--primario);
+  font-weight: 400;
+  text-align: left;
+  text-decoration: underline;
+}
+
+.boton--enlace:hover:not(:disabled) {
+  background: none;
+}
+
+.boton--peligro {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.acciones--pie {
+  margin-top: 1rem;
+}
+
+.acciones--derecha {
+  justify-content: flex-end;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.65rem;
+}
+
+.campo label {
+  font-weight: 700;
+  font-size: 0.93rem;
+}
+
+.campo input,
+.campo select,
+.tabla input {
+  width: 100%;
+  min-height: 32px;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--borde-campo);
+  border-radius: 6px;
+  font: inherit;
+  background: var(--fondo-tarjeta);
+  color: var(--texto);
+}
+
+.campo input[readonly],
+.tabla input[readonly] {
+  padding-left: 0;
+  border-color: transparent;
+  background: transparent;
+}
+
+.campo--error input,
+.campo--error select,
+.campo--error textarea,
+.tabla input.input--error {
+  border-color: var(--error);
+}
+
+.campo__problema {
+  margin: 0;
+  color: var(--error);
+  font-size: 0.86rem;
+}
+
+.campo__fuente {
+  margin: 0;
+  color: var(--tenue);
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.campo__referencia {
+  margin: 0;
+  color: var(--aviso);
+  font-size: 0.8rem;
+}
+
+.campo textarea {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--borde-campo);
+  border-radius: 6px;
+  font: inherit;
+  resize: vertical;
+}
+
+fieldset {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.75rem 0.2rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--fondo-tarjeta);
+}
+
+legend {
+  padding: 0 0.3rem;
+  font-weight: 700;
+}
+
+fieldset.campo {
+  border: 0;
+  padding: 0;
+  margin: 0 0 0.75rem;
+  background: transparent;
+}
+
+fieldset.campo legend,
+.campo__etiqueta {
+  display: block;
+  margin-bottom: 0.25rem;
+  padding: 0;
+  font-size: 0.93rem;
+  font-weight: 700;
+}
+
+.subformulario {
+  background: var(--primario-claro);
+}
+
+.opciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
+  min-height: 32px;
+}
+
+.opciones label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.fila-campos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0 0.75rem;
+}
+
+.fila-campos--dos {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Insignias en píldora: error, ok, info, aviso y neutra. */
+.insignia {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.6rem;
+  border-radius: 999px;
+  background: var(--neutra-fondo);
+  color: #3d4c5c;
+  font-size: 0.86rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.insignia--grande {
+  padding: 0.3rem 0.85rem;
+  font-size: 0.98rem;
+}
+
+.insignia--ok {
+  background: var(--ok-fondo);
+  color: var(--ok);
+}
+
+.insignia--error {
+  background: var(--error-fondo);
+  color: var(--error-texto);
+}
+
+.insignia--aviso {
+  background: var(--aviso-fondo);
+  color: var(--aviso);
+}
+
+.insignia--info,
+.insignia--diseno {
+  background: var(--primario-claro);
+  color: var(--info-texto);
+}
+
+/* El código de una observación: O-1 en rojo si es bloqueante, en gris si no. */
+.insignia--codigo {
+  background: var(--error);
+  color: #ffffff;
+}
+
+.insignia--codigo-sugerida {
+  background: #6c7a89;
+  color: #ffffff;
+}
+
+/* --- Avisos ----------------------------------------------------------------------------------------- */
+
+.aviso {
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radio);
+  font-size: 0.93rem;
+}
+
+.aviso p {
+  margin: 0.15rem 0;
+}
+
+.aviso--error {
+  border: 1px solid #f5b5b5;
+  background: #fff5f5;
+  color: #742a2a;
+}
+
+.aviso__titulo {
+  font-weight: 700;
+}
+
+.aviso__problemas {
+  margin: 0.3rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.aviso--info {
+  display: flex;
+  gap: 0.6rem;
+  border: 1px solid #d5e3f2;
+  background: #f7fafd;
+  color: #24486e;
+}
+
+.aviso--ok {
+  border: 1px solid #a7e3bf;
+  background: #f0fbf4;
+  color: #1c5b36;
+}
+
+.aviso--temporal {
+  border: 1px solid #f3d38a;
+  background: #fffbeb;
+  color: #5c3b00;
+}
+
+.aviso__icono {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primario);
+  color: #ffffff;
+  font-family: Georgia, serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* --- Tablas ----------------------------------------------------------------------------------------- */
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.97rem;
+}
+
+.tabla th,
+.tabla td {
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--borde);
+  text-align: left;
+}
+
+.tabla th {
+  background: #eef2f6;
+  color: #4b5b6b;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tabla .numero {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabla--compacta th,
+.tabla--compacta td {
+  padding: 0.3rem 0.35rem;
+  font-size: 0.9rem;
+}
+
+.tabla--compacta th:first-child {
+  width: 46%;
+}
+
+.diferencia--mejor {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.diferencia--peor {
+  color: var(--error-texto);
+  font-weight: 700;
+}
+
+/* Una tabla dentro de una tarjeta de la hoja. */
+.tarjeta-tabla {
+  overflow: hidden;
+  padding: 0;
+}
+
+.tarjeta-tabla .tabla th:first-child,
+.tarjeta-tabla .tabla td:first-child {
+  padding-left: 0.95rem;
+}
+
+/* --- Los pasos del alta, en la barra de la página (figuras 15 y 16) ------------------------------------ */
+
+.pasos {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pasos__paso {
+  display: flex;
+  align-items: center;
+}
+
+.pasos__linea {
+  width: 26px;
+  height: 2px;
+  margin: 0 0.5rem;
+  background: var(--borde-campo);
+}
+
+.pasos__boton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.2rem 0.1rem;
+  border: 0;
+  background: none;
+  color: var(--tenue);
+  font: inherit;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.pasos__boton:disabled {
+  cursor: default;
+}
+
+.pasos__numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--borde-campo);
+  border-radius: 50%;
+  font-size: 0.8rem;
+}
+
+.pasos__paso--hecho .pasos__boton {
+  color: var(--ok);
+}
+
+.pasos__paso--hecho .pasos__numero {
+  border-color: var(--ok);
+  background: var(--ok);
+  color: #ffffff;
+}
+
+.pasos__paso--actual .pasos__boton {
+  color: var(--primario);
+}
+
+.pasos__paso--actual .pasos__numero {
+  border-color: var(--primario);
+  background: var(--primario);
+  color: #ffffff;
+}
+
+.pasos__marca {
+  position: absolute;
+  top: -2px;
+  left: 15px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--error);
+}
+
+.generar__campos {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.chip {
+  min-width: 2.2rem;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--borde-campo);
+  border-radius: 999px;
+  background: var(--fondo-tarjeta);
+  color: var(--texto);
+  font: inherit;
+  text-align: center;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.chip--activo {
+  border-color: var(--primario);
+  background: var(--primario);
+  color: #ffffff;
+}
+
+/* Un selector segmentado («Alternativa A | Alternativa B», «Loteo | Playa de estacionamiento»). */
+.segmentado {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--borde-campo);
+  border-radius: 6px;
+  background: var(--fondo-tarjeta);
+}
+
+.segmentado__opcion {
+  min-width: 9rem;
+  padding: 0.5rem 1.2rem;
+  border: 0;
+  border-left: 1px solid var(--borde-campo);
+  background: transparent;
+  color: #33475b;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.segmentado__opcion:first-child {
+  border-left: 0;
+}
+
+.segmentado__opcion--activa {
+  background: var(--primario);
+  color: #ffffff;
+}
+
+.segmentado__opcion:disabled {
+  color: #9aa7b5;
+  cursor: not-allowed;
+}
+
+/* --- Sobre el mapa: capas, norte, escala, avisos y etiquetas ------------------------------------------ */
+
+.sobre-mapa {
+  position: absolute;
+  z-index: 1000;
+  border-radius: var(--radio);
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 1px 4px rgba(19, 41, 61, 0.22);
+}
+
+/* El panel «Capas»: cada capa con su casilla y su muestra (es también la leyenda, figura 17). */
+.capas {
+  top: 10px;
+  left: 56px;
+  min-width: 190px;
+  padding: 0.55rem 0.75rem 0.6rem;
+  font-size: 0.93rem;
+}
+
+.capas__titulo {
+  margin: 0 0 0.3rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.capas__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.12rem 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.capas__item input {
+  margin: 0;
+  accent-color: var(--primario);
+}
+
+.capas--plegado .capas__item {
+  display: none;
+}
+
+.capas__plegar {
+  float: right;
+  margin: -0.15rem -0.25rem 0 0.5rem;
+  padding: 0 0.25rem;
+  border: 0;
+  background: transparent;
+  color: var(--tenue);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* La muestra de una capa en el panel y en las leyendas. */
+.muestra {
+  flex: none;
+  width: 18px;
+  height: 12px;
+  border: 1.5px solid var(--borde-muestra, var(--color));
+  border-radius: 2px;
+  background: var(--color);
+}
+
+.muestra--borde {
+  background: transparent;
+}
+
+.muestra--punteada {
+  border-style: dashed;
+  background: transparent;
+}
+
+.muestra--rayada {
+  background: repeating-linear-gradient(-45deg, var(--color) 0 1.5px, var(--fondo-muestra, transparent) 1.5px 4px);
+}
+
+/* El aviso de lo que se está dibujando, arriba a la izquierda (figuras 15 y 19). */
+.aviso-mapa {
+  top: 10px;
+  left: 56px;
+  max-width: 360px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.93rem;
+}
+
+.aviso-mapa strong {
+  display: block;
+}
+
+.aviso-mapa--naranja strong {
+  color: #b5570f;
+}
+
+/* El norte, arriba a la derecha. */
+.norte {
+  top: 12px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--azul-noche);
+  font-size: 0.8rem;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.norte__circulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #c9d2db;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(19, 41, 61, 0.2);
+}
+
+/* La escala, abajo a la izquierda, en un recuadro blanco. */
+.mapa .leaflet-control-scale {
+  margin-bottom: 12px;
+  margin-left: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 3px rgba(19, 41, 61, 0.2);
+}
+
+.mapa .leaflet-control-scale-line {
+  border: 2px solid var(--texto);
+  border-top: 0;
+  background: transparent;
+  color: var(--texto);
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.mapa .leaflet-control-zoom a {
+  color: var(--texto);
+}
+
+/* Las etiquetas permanentes: las manzanas (M1…), el verde y las áreas. */
+.leaflet-tooltip.etiqueta-manzana,
+.leaflet-tooltip.etiqueta-verde {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-weight: 700;
+}
+
+.leaflet-tooltip.etiqueta-manzana {
+  color: #1d3550;
+  font-size: 12px;
+}
+
+.leaflet-tooltip.etiqueta-verde {
+  color: #2d6a2f;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.leaflet-tooltip.etiqueta-manzana::before,
+.leaflet-tooltip.etiqueta-verde::before {
+  display: none;
+}
+
+/* Los accesos: un círculo azul con su código adentro (figuras 15 a 21). */
+.icono-acceso {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #2674b4;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.acceso-compartido {
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #2674b4;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.acceso-compartido__texto {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+/* La etiqueta de un área reservada que se dibuja en el alta (R1, R2…; D59). */
+.etiqueta-area {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #c98a3a;
+  color: #7b4a12;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.etiqueta-observacion {
+  padding: 0.1rem 0.45rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--error);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+/* El botón de la herramienta de las áreas reservadas: el polígono, con borde naranja. */
+.leaflet-pm-toolbar .icono-area-reservada {
+  outline: 2px solid #c98a3a;
+  outline-offset: -3px;
+  border-radius: 2px;
+}
+
+/* El <pattern> de los rayados: no ocupa lugar. */
+.definiciones-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* La propiedad de CSS manda sobre el atributo `fill` que pone Leaflet. */
+.leaflet-interactive.rayado-fijado,
+path.rayado-fijado {
+  fill: url(#rayado-fijado);
+  fill-opacity: 1;
+}
+
+.leaflet-interactive.rayado-reservada,
+path.rayado-reservada {
+  fill: url(#rayado-reservada);
+  fill-opacity: 1;
+}
+
+/* La muestra de una capa (el panel «Capas»). */
+.leyenda__muestra {
+  width: 14px;
+  height: 10px;
+  border: 1px solid var(--color);
+  background: var(--color);
+}
+
+.leyenda__muestra--borde {
+  border-width: 2px;
+  background: transparent;
+}
+
+.leyenda__muestra--punteada {
+  border: 2px dashed var(--color);
+  background: transparent;
+}
+
+.leyenda__muestra--rayada {
+  border: 2px dashed var(--color);
+  background: repeating-linear-gradient(45deg, var(--color) 0 2px, transparent 2px 5px);
+  opacity: 0.7;
+}
+
+/* Generando o recalculando: un velo sobre el mapa. */
+.velo {
+  position: absolute;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.55);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.velo__giro {
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 3px solid var(--borde);
+  border-top-color: var(--primario);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- Diálogo (generar una alternativa) ---------------------------------------------------------------- */
+
+.dialogo-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+  background: rgba(19, 41, 61, 0.35);
+}
+
+.dialogo {
+  width: min(30rem, calc(100% - 2rem));
+  padding: 1.1rem 1.25rem 1.2rem;
+  border-radius: 10px;
+  background: var(--fondo-tarjeta);
+  box-shadow: 0 12px 40px rgba(19, 41, 61, 0.3);
+}
+
+.dialogo h2 {
+  margin-bottom: 0.25rem;
+}
+
+.dialogo__generando {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  font-weight: 700;
+}
+
+/* --- La página del proyecto ------------------------------------------------------------------------ */
+
+.lista-alternativas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista-alternativas li {
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--borde);
+}
+
+.lista-alternativas li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.lista-alternativas__fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.lista-alternativas__nombre {
+  font-size: 1.02rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.enlaces-proyecto {
+  display: grid;
+  gap: 0.35rem;
+}
+
+/* --- Versiones ---------------------------------------------------------------------------------------- */
+
+.lista-versiones {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista-versiones li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  border-top: 1px solid var(--borde);
+}
+
+.lista-versiones li:first-child {
+  border-top: 0;
+}
+
+.lista-versiones__actual {
+  font-weight: 700;
+}
+
+/* --- Observaciones ------------------------------------------------------------------------------------- */
+
+.lista-observaciones {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.observacion {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--fondo-tarjeta);
+  cursor: pointer;
+}
+
+.observacion--elegida {
+  border-color: var(--error);
+  box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.14);
+}
+
+.observacion__insignias {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.observacion__estado {
+  margin-left: auto;
+}
+
+.observacion__descripcion {
+  margin: 0.5rem 0 0.35rem;
+  font-size: 1.02rem;
+}
+
+.observacion__respuesta {
+  margin: 0.4rem 0 0.4rem 0.75rem;
+  padding-left: 0.6rem;
+  border-left: 3px solid #a7e3bf;
+  font-size: 0.93rem;
+}
+
+.observacion__respuesta p {
+  margin: 0.2rem 0 0;
+}
+
+.observacion__responder,
+.observacion-nueva {
+  margin-top: 0.5rem;
+  cursor: default;
+}
+
+.observacion-nueva__sector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.texto-naranja {
+  color: #b5570f;
+  font-weight: 700;
+}
+
+/* --- Usuarios, enlaces y el inicio de sesión ---------------------------------------------------------- */
+
+.pagina--centrada {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 3rem;
+  background: var(--fondo-pagina);
+}
+
+.tarjeta {
+  width: min(26rem, 100%);
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: var(--fondo-tarjeta);
+  box-shadow: 0 2px 12px rgba(31, 41, 51, 0.08);
+}
+
+.tarjeta h2 {
+  margin-bottom: 1rem;
+}
+
+.temporal {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.temporal code {
+  padding: 0.3rem 0.6rem;
+  border: 1px dashed #c9a227;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+}
+
+.subformulario--usuario {
+  margin-bottom: 1rem;
+}
+
+.subformulario--usuario h3 {
+  margin-bottom: 0.6rem;
+}
+
+.acciones-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.fila--inactiva td {
+  color: var(--tenue);
+}
+
+.lista-areas {
+  margin: 0.5rem 0;
+  padding-left: 1.1rem;
+}
+
+.lista-areas li {
+  margin-bottom: 0.3rem;
+}
+
+.lista-seleccion {
+  list-style: none;
+  margin: 0.5rem 0 0.75rem;
+  padding: 0;
+}
+
+.lista-seleccion li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--borde);
+}
+
+.enlace-nuevo__direccion {
+  font-size: 0.86rem !important;
+  letter-spacing: normal !important;
+  word-break: break-all;
+}
+
+.tabla-enlaces td {
+  vertical-align: top;
+}
+
+.confirmar {
+  font-size: 0.93rem;
+}
+
+.bloqueadas {
+  margin-top: 2rem;
+}
+
+/* --- La comparación (CU13, p. 51) -------------------------------------------------------------------- */
+
+.comparacion__eleccion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.comparacion__eleccion .chips {
+  margin-bottom: 0;
+}
+
+.comparacion__mapas {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.comparacion__tarjeta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--fondo-tarjeta);
+  overflow: hidden;
+}
+
+.comparacion__titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.comparacion__titulo h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  white-space: nowrap;
+}
+
+.comparacion__titulo h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.comparacion__casilla {
+  margin-left: auto;
+}
+
+/* «Seleccionada» u «Obs. bloqueante» (figura 20). */
+.casilla {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--primario);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.casilla input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--primario);
+}
+
+.casilla--deshabilitada {
+  color: var(--tenue);
+  font-weight: 400;
+  cursor: not-allowed;
+}
+
+/* Los mapas chicos de la figura 20, sin controles: se mueven juntos. */
+.comparacion__mapa {
+  position: relative;
+  height: 240px;
+  border-top: 1px solid var(--borde);
+}
+
+.comparacion__menu {
+  width: min(560px, 80vw);
+  padding: 0.3rem 0.4rem;
+}
+
+.comparacion__menu .comparacion__eleccion:last-child {
+  margin-bottom: 0;
+}
+
+.comparacion__delta {
+  display: inline-block;
+  min-width: 4.2rem;
+  margin-left: 0.45rem;
+  color: var(--tenue);
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+.comparacion__nota {
+  margin: 0.6rem 0 0;
+  font-size: 0.86rem;
+}
+
+/* «Compartir con el cliente»: el enlace recién generado, en un recuadro punteado. */
+.tarjeta-compartir .filas {
+  margin-bottom: 0.7rem;
+}
+
+.enlace-generado {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.4rem 0;
+  padding: 0.55rem 0.7rem;
+  border: 1px dashed var(--primario);
+  border-radius: var(--radio);
+  background: var(--primario-claro);
+}
+
+.enlace-generado code {
+  flex: 1;
+  min-width: 0;
+  color: var(--primario);
+  font-weight: 700;
+}
+
+.tarjeta-compartir__todos {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: 0.93rem;
+}
+
+.comparacion__tablas {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: start;
+  margin-top: 0.9rem;
+}
+
+.comparacion__tablas--una {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.comparacion__tablas h3 {
+  margin-bottom: 0.4rem;
+}
+
+.comparacion__tabla th:not(:first-child),
+.comparacion__tabla td:not(:first-child) {
+  white-space: nowrap;
+}
+
+/* El mejor valor, solo donde la dirección no se discute (D54). */
+.tabla .comparacion__mejor {
+  background: #e7f4ea;
+  color: #1f7a45;
+  font-weight: 700;
+}
+
+/* --- La vista del cliente (CU15, figura 21) ------------------------------------------------------------ */
+
+.cabecera-cliente {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 52px;
+  padding: 0 1.15rem;
+  border-bottom: 1px solid var(--borde);
+  background: var(--fondo-tarjeta);
+}
+
+.cabecera-cliente__nombre {
+  font-size: 1.18rem;
+  font-weight: 700;
+}
+
+.cabecera-cliente .insignia {
+  margin-left: auto;
+}
+
+.subcabecera-cliente {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.15rem;
+  border-bottom: 1px solid var(--borde);
+  background: var(--fondo-tarjeta);
+}
+
+.subcabecera-cliente h1 {
+  font-size: 1.3rem;
+}
+
+.cliente {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--ancho-panel);
+  gap: 1rem;
+  height: 100%;
+  padding: 1rem 1.15rem;
+}
+
+.cliente__mapa {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: #f2efe9;
+}
+
+.cliente__panel {
+  overflow: auto;
+}
+
+.cliente__panel .tarjeta-seccion {
+  background: var(--fondo-tarjeta);
+}
+
+.compartida__bloqueo {
+  max-width: 40rem;
+}
+
+/* Las clases de la vista del cliente de la sesión 13, que usa la skill verify. */
+.indicadores-cliente {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0 0 0.75rem;
+}
+
+.indicador-cliente {
+  display: flex;
+  flex-direction: column;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: var(--fondo-tarjeta);
+}
+
+.indicador-cliente__titulo {
+  color: var(--tenue);
+  font-size: 0.9rem;
+}
+
+.indicador-cliente__valor {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.indicador-cliente__detalle {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--tenue);
+}
+
+/* Una lista «dato: valor» de dos columnas (la vista previa de «Fijar sectores», los indicadores de más). */
+.indicadores {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.3rem 0.75rem;
+  margin: 0.5rem 0 0;
+}
+
+.indicadores dt {
+  color: var(--tenue);
+}
+
+.indicadores dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Solo para los lectores de pantalla. */
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* El título del panel en un modo («Fijar sectores de B · v1»). */
+.titulo-panel {
+  margin: 0 0 0.6rem;
+  font-size: 1.12rem;
+}
+
+/* Las diferencias entre versiones: los números no se parten. */
+.diferencias td.numero,
+.diferencias th.numero {
+  white-space: nowrap;
+}
+
+/* La nueva observación: el tipo a la izquierda y la criticidad a su lado (figura 19). */
+.observacion-nueva .fila-campos--dos {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+/* --- Los parámetros (CU05, figura 16) ----------------------------------------------------------------- */
+
+.parametros-pagina {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.parametros-pagina__lateral .tarjeta-seccion {
+  background: var(--fondo-tarjeta);
+}
+
+.parametros__fila {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 0.9rem;
+  align-items: start;
+}
+
+.campos-dos,
+.campos-cuatro {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 0.75rem;
+}
+
+.campos-cuatro {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.campo__rotulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* La unidad dentro del campo, a la derecha (figura 16). */
+.campo__entrada {
+  position: relative;
+  display: block;
+}
+
+.campo__entrada input {
+  padding-right: 2.6rem;
+}
+
+.campo__unidad {
+  position: absolute;
+  top: 50%;
+  right: 0.6rem;
+  transform: translateY(-50%);
+  color: var(--tenue);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.campo__entrada--tabla {
+  display: inline-block;
+  width: 7.5rem;
+}
+
+.campo__entrada--tabla input {
+  text-align: right;
+}
+
+/* La fuente de un valor: el artículo, al pasar el mouse (D23). */
+.fuente {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border: 1px solid var(--borde-campo);
+  border-radius: 50%;
+  color: var(--tenue);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: help;
+}
+
+.insignia--mini {
+  padding: 0 0.4rem;
+  font-size: 0.72rem;
+}
+
+/* «A validar» y «Criterio de diseño», debajo del campo. */
+.campo__marcas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--tenue);
+  font-size: 0.8rem;
+}
+
+.tabla-jerarquias__marcas {
+  gap: 0.25rem 1rem;
+  margin: 0.4rem 0 0;
+}
+
+/* La casilla «Exigir avenidas» (D85), arriba de los campos del art. 12, y la de la calle de borde (D86),
+   debajo. */
+.parametros__avenidas,
+.parametros__calle-borde {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.parametros__calle-borde {
+  margin: 0.2rem 0 0.8rem;
+}
+
+.tabla-jerarquias th {
+  white-space: nowrap;
+}
+
+.tabla-jerarquias {
+  margin-top: 0.4rem;
+}
+
+.tabla-jerarquias .tabla-jerarquias__nombre {
+  font-weight: 700;
+}
+
+.tabla-jerarquias__total {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tabla-jerarquias th .fuente {
+  margin-left: 0.2rem;
+}
+
+.versiones-conjunto {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.versiones-conjunto li {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--borde);
+}
+
+.versiones-conjunto li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.versiones-conjunto strong {
+  display: block;
+}
+
+.versiones-conjunto span:not(.versiones-conjunto__numero) {
+  color: var(--tenue);
+  font-size: 0.86rem;
+}
+
+.versiones-conjunto__numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--neutra-fondo);
+  color: #3d4c5c;
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+
+.versiones-conjunto__numero--vigente {
+  background: var(--ok-fondo);
+  color: var(--ok);
+}
+
+.versiones-conjunto__numero--edicion {
+  background: var(--aviso-fondo);
+  color: var(--aviso);
+}
+
+.versiones-conjunto__actual strong {
+  color: var(--primario);
+}
+
+.efecto {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 0.6rem;
+}
+
+.efecto p {
+  margin: 0.2rem 0 0;
+  color: var(--tenue);
+}
+
+.tarjeta__estado {
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* «Referencia normativa»: un recuadro con la «i» (figura 16). */
+.aviso-info {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+  padding: 0.75rem 0.95rem;
+  border: 1px solid #c9dcf0;
+  border-radius: var(--radio);
+  background: var(--primario-claro);
+}
+
+.aviso-info p {
+  margin: 0.15rem 0 0;
+  color: var(--tenue);
+}
+
+/* --- El alta (CU03, figuras 15 y 16) -------------------------------------------------------------------- */
+
+/* Lo que se lee con un lector de pantalla y no se ve. */
+.oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.panel--alta {
+  font-size: 0.9rem;
+}
+
+.panel--alta .tarjeta-seccion {
+  background: var(--fondo-tarjeta);
+}
+
+.panel--alta .filas {
+  margin-bottom: 0.6rem;
+}
+
+/* El tipo de proyecto: «Loteo | Playa de estacionamiento». */
+.segmentado {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  margin: 0.25rem 0 0.6rem;
+}
+
+.segmentado > span {
+  display: flex;
+}
+
+.segmentado > span > .segmentado__opcion {
+  flex: 1;
+}
+
+.segmentado__opcion {
+  min-height: 32px;
+  padding: 0.3rem 0.7rem;
+  white-space: nowrap;
+  border: 1px solid var(--borde-campo);
+  background: var(--fondo-tarjeta);
+  color: var(--primario);
+  font: inherit;
+  font-weight: 700;
+}
+
+.segmentado > .segmentado__opcion:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.segmentado > span > .segmentado__opcion {
+  border-left: 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.segmentado__opcion--activa {
+  border-color: var(--primario);
+  background: var(--primario);
+  color: #ffffff;
+}
+
+.segmentado__opcion:disabled {
+  color: var(--tenue);
+  cursor: not-allowed;
+}
+
+.segmentado__nota {
+  grid-column: 1 / -1;
+  margin-top: 0.2rem;
+  color: var(--tenue);
+  font-size: 0.8rem;
+}
+
+/* «Herramientas de delimitación»: cuatro botones grandes y los de editar, más chicos. */
+.herramientas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.herramienta {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0.4rem 0.55rem;
+  font-size: 0.86rem;
+  line-height: 1.2;
+  border: 1px solid var(--borde-campo);
+  border-radius: var(--radio);
+  background: var(--fondo-tarjeta);
+  color: var(--texto);
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.herramienta:hover {
+  border-color: var(--primario);
+}
+
+.herramienta--activa {
+  border-color: var(--primario);
+  background: var(--primario-claro);
+  color: var(--primario);
+}
+
+.herramienta__icono {
+  width: 18px;
+  color: var(--primario);
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.herramientas--chicas {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.herramientas--chicas .boton {
+  padding-inline: 0.4rem;
+  font-size: 0.86rem;
+}
+
+.boton--activo {
+  border-color: var(--primario);
+  background: var(--primario-claro);
+  color: var(--primario);
+}
+
+.importar {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--borde);
+}
+
+/* «Terreno»: superficie, perímetro y vértices, en tres recuadros. */
+.datos-terreno {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.dato-terreno {
+  display: flex;
+  flex-direction: column;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--fondo-suave);
+}
+
+.dato-terreno span {
+  color: var(--tenue);
+  font-size: 0.86rem;
+}
+
+.dato-terreno strong {
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.dato-terreno small {
+  color: var(--tenue);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+/* A1, R1: el código en un círculo, como en el mapa. */
+.codigo-redondo {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 24px;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: #2674b4;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.codigo-redondo--area {
+  background: #c98a3a;
+}
+
+.fila-acceso,
+.fila-area__principal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+}
+
+.fila-acceso input,
+.fila-area__principal input {
+  width: 100%;
+  min-height: 30px;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--borde-campo);
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 700;
+}
+
+.fila-acceso > input {
+  flex: 1;
+  min-width: 0;
+}
+
+.fila-acceso__rotulo {
+  color: var(--tenue);
+  font-size: 0.9rem;
+}
+
+.fila-acceso__ancho {
+  flex: 0 0 6.5rem;
+}
+
+.fila-area {
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--borde);
+}
+
+.fila-area__principal .campo {
+  flex: 1;
+  margin: 0;
+}
+
+.fila-area__dato {
+  color: var(--texto);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.fila-area__mas {
+  margin-top: 0.2rem;
+}
+
+.fila-area__mas label {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--tenue);
+}
+
+/* El aviso del mapa mientras se dibuja (figuras 15 y 19): la segunda línea, más tenue. */
+.aviso-mapa span {
+  display: block;
+  color: var(--tenue);
+  font-size: 0.9rem;
+}
+
+.aviso-mapa .texto-error {
+  color: var(--error);
+}
+
+/* V1… y el largo de cada lado (figura 15): los ubica `RotulosTerreno`. */
+.rotulo {
+  overflow: visible;
+}
+
+.rotulo span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #13293d;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow:
+    0 0 3px #ffffff,
+    0 0 3px #ffffff,
+    0 0 3px #ffffff;
+  /* Gira alrededor de su centro: `RotulosTerreno` lo centra en el punto y lo corre hacia afuera. */
+  transform-origin: 50% 50%;
+}
+
+.rotulo-vertice {
+  font-size: 11px;
+}
+
+/* El paso 3 del alta: los parámetros, sin el mapa (figura 16). */
+.alta-parametros {
+  height: 100%;
+}

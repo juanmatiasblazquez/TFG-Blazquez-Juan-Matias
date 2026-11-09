@@ -1,0 +1,117 @@
+# Entorno de DESARROLLO. Producción vive en docker-compose.prod.yml, un archivo aparte y no
+# un override de este (docs/decisiones.md, D10).
+#
+#   Copy-Item .env.example .env
+#   docker compose up --build
+#
+# Entrada única: http://localhost:8080 (Nginx). /api va a la API y el resto al dev-server de
+# Vite: misma topología que producción, sin CORS. La API no publica puertos; su documentación
+# queda en http://localhost:8080/api/docs.
+name: trazados-dev
+
+# Logs del json-file rotados: sin techo crecen hasta llenar el disco (mismo criterio que GO7).
+x-logs: &logs
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  proxy:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    depends_on:
+      - api
+      - frontend
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+    volumes:
+      - ./frontend/nginx/dev.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend/nginx/api.inc:/etc/nginx/snippets/api.inc:ro
+    logging: *logs
+
+  api:
+    build:
+      context: ./backend
+      # El motor es un paquete aparte (RNF07): llega a la imagen como un segundo contexto.
+      additional_contexts:
+        motor: ./motor
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: ${APP_ENV:-dev}
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-trazados}
+      DB_USER: ${DB_USER:-trazados}
+      DB_PASSWORD: ${DB_PASSWORD:-trazados-dev}
+      # El nombre del estudio, en la barra del portal y en la vista del cliente (D74). Opcional.
+      NOMBRE_ESTUDIO: ${NOMBRE_ESTUDIO:-}
+      # Hot reload de Uvicorn (entrypoint.sh) con polling: en Docker Desktop sobre Windows
+      # los cambios del bind mount no generan eventos de archivo dentro del contenedor.
+      APP_RELOAD: "1"
+      WATCHFILES_FORCE_POLLING: "true"
+    volumes:
+      - ./backend:/code
+      - ./motor:/motor
+    healthcheck:
+      # /api/health: 200 solo si la base responde y PostGIS está habilitado.
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import urllib.request,sys;
+          sys.exit(0 if urllib.request.urlopen('http://localhost:8000/api/health', timeout=5).status == 200 else 1)"
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging: *logs
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    environment:
+      # Puerto de Nginx, para que el websocket del hot reload se abra contra él.
+      HTTP_PORT: ${HTTP_PORT:-8080}
+      DEV_POLLING: "1"
+    volumes:
+      - ./frontend:/app
+      # node_modules queda en un volumen del contenedor: el del host (si existe) no lo pisa.
+      - /app/node_modules
+    logging: *logs
+
+  db:
+    build: ./docker/db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-trazados}
+      POSTGRES_USER: ${DB_USER:-trazados}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-trazados-dev}
+    ports:
+      # Solo en 127.0.0.1 del host, para QGIS/pgAdmin/psql. La API la alcanza por la red
+      # interna de Docker (db:5432), no por este puerto.
+      - "127.0.0.1:${DB_PORT_HOST:-5432}:5432"
+    volumes:
+      - db_datos:/var/lib/postgresql/data
+    healthcheck:
+      # -h 127.0.0.1: durante la inicialización del volumen el servidor temporal solo
+      # escucha por socket; por TCP recién responde cuando está listo de verdad.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    logging: *logs
+
+  # Pruebas del motor AISLADAS de la API (RNF07). No arranca con `up`:
+  #   docker compose run --rm motor
+  motor:
+    build: ./motor
+    profiles: ["herramientas"]
+    volumes:
+      - ./motor:/motor
+
+volumes:
+  db_datos:

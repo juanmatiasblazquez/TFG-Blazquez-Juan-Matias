@@ -1,0 +1,16 @@
+fastapi==0.162.0
+uvicorn[standard]==0.54.0
+SQLAlchemy==2.1.6
+alembic==1.20.1
+psycopg[binary]==3.3.6
+# Tipos geometry de PostGIS en SQLAlchemy y Alembic (D28). Shapely lo trae el motor.
+GeoAlchemy2==0.20.0
+pydantic-settings==2.16.1
+# Hash de las contraseñas con Argon2id (RNF02, Seguridad p. 53; D66). El documento no nombra un
+# algoritmo: Argon2id es la recomendación de OWASP y del RFC 9106.
+argon2-cffi==25.1.0
+# Pruebas: corren dentro del contenedor api, contra la base de test
+# (docker compose exec -e DB_NAME=trazados_test api pytest).
+pytest==9.1.1
+# Cliente del TestClient de Starlette (desde Starlette 1.x reemplaza a httpx).
+httpx2==2.16.0

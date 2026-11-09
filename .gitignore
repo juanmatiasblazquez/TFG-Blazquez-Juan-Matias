@@ -1,0 +1,72 @@
+# ---------------------------------------------------------------------------------------------
+# Credenciales. El .env se crea copiando .env.example y NUNCA se sube: lleva la contraseña de la
+# base. Lo mismo vale para cualquier otro archivo de entorno (por ejemplo, prod.env).
+# ---------------------------------------------------------------------------------------------
+.env
+.env.*
+*.env
+!.env.example
+
+# Certificados y claves (el TLS del deploy).
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Dumps y respaldos de la base: traen hashes de contraseñas y datos de clientes.
+backups/
+*.dump
+*.backup
+*.sql
+*.sql.gz
+
+# ---------------------------------------------------------------------------------------------
+# Documentación interna y configuración del asistente: quedan solo en el disco del autor.
+# El repositorio publica el código y el README.
+# ---------------------------------------------------------------------------------------------
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+.mcp.json
+docs/
+*.pdf
+.local/
+
+# ---------------------------------------------------------------------------------------------
+# Generado
+# ---------------------------------------------------------------------------------------------
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+*.egg-info/
+build/
+
+# Node (las dependencias y el build se generan dentro de los contenedores).
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+test-results/
+playwright-report/
+
+# Salida del caso de referencia del motor (GeoJSON para QGIS): se regenera con
+# docker compose run --rm motor python -m motor_trazados.referencia
+motor/salida/
+# Capas que guarda scripts/generar-referencia.ps1 (alternativas generadas por la API).
+/salida/
+
+*.log
+
+# Editor y sistema operativo
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "motor-trazados"
+version = "0.11.0"
+description = "Motor de partición de polígonos con restricciones para trazados de loteo y playas de estacionamiento."
+requires-python = ">=3.12"
+# Versiones EXACTAS a propósito (RNF05): un cambio de Shapely (y de la GEOS que trae) o de
+# NumPy puede cambiar el resultado de una misma solicitud. Subir una versión es una decisión
+# que se registra en docs/decisiones.md, no un bump automático.
+# Solo pueden figurar paquetes de PERMITIDOS en tests/test_independencia.py (RNF07).
+dependencies = [
+    "shapely==2.2.0",
+    "networkx==3.7",
+    "numpy==2.5.4",
+    "pyproj==3.8.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest==9.1.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+motor_trazados = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# El barrido largo (96 terrenos con el verde asignado) se corre aparte: pytest -m barrido.
+addopts = "-ra -m 'not barrido'"
+markers = ["barrido: barrido largo de terrenos irregulares (D44); se corre con -m barrido"]
